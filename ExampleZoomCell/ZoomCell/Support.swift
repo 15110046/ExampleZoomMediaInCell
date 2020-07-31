@@ -5,13 +5,6 @@
 
 import UIKit
 
-extension NSNotification.Name {
-    
-    public static let CellisZooming = Notification.Name("CellisZooming")
-    public static let CellStopZoom = Notification.Name("CellStopZoom")
-
-}
-
 extension UIView {
 
     var globalFrame :CGRect? {

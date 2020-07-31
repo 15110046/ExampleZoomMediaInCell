@@ -8,30 +8,33 @@ import UIKit
 public class HImageView: UIImageView {
     
     //MARK: Delegate + Config
-    weak var delegate: HImageViewDelegate?
-    var config: HImageViewConfigure = HImageViewConfigure()
+    public weak var delegate: HImageViewDelegate?
+    public var config: HImageViewConfigure = HImageViewConfigure()
     
     //MARK: Varible
-    var isZooming = false
-    var originalImageCenter: CGPoint?
-    var frameImageOriginal: CGRect = .zero
-    var alphaComponent: ((CGFloat)->())?
+    public var isZooming = false
+    public var originalImageCenter: CGPoint?
+    public var frameImageOriginal: CGRect = .zero
+    public var alphaComponent: ((CGFloat)->())?
+    public var pinch = UIPinchGestureRecognizer()
+    public var pan = UIPanGestureRecognizer()
         
     //MARK: UI
-    var viewContainer: UIView? = nil
-    var imageView: UIImageView? = UIImageView(frame: .zero)
+    public var viewContainer: UIView? = nil
+    public var imageView: UIImageView? = UIImageView(frame: .zero)
     
+
     public func config(_ model: HImageViewConfigure) {
         self.config = model
     }
     
     //MARK: Set up
     private func initPanGesture() {
-        let pinch = UIPinchGestureRecognizer(target: self, action: #selector(pinchGestureHandle(_:)))
+        pinch.addTarget(self, action: #selector(pinchGestureHandle(_:)))
         pinch.delegate = self
         self.addGestureRecognizer(pinch)
         
-        let pan = UIPanGestureRecognizer(target: self, action: #selector(panGestureHandle(_:)))
+        pan.addTarget(self, action: #selector(panGestureHandle(_:)))
         pan.delegate = self
         self.addGestureRecognizer(pan)
         
@@ -45,9 +48,7 @@ public class HImageView: UIImageView {
         }
     }
     
-    fileprivate func setUpViews() {
-        
-    }
+    fileprivate func setUpViews() {}
     
     //MARK: Init
     public override func awakeFromNib() {
@@ -66,17 +67,18 @@ public class HImageView: UIImageView {
     
     //MARK: Action
     @objc private func panGestureHandle(_ sender: UIPanGestureRecognizer) {
+        guard let imageView = imageView else { return }
+        
         if isZooming, sender.state == .began {
-            originalImageCenter = imageView!.center
+            originalImageCenter = imageView.center
         }
         else
             if isZooming, sender.state == .changed {
-            let translation = sender.translation(in: self)
-            if let view = imageView {
-                view.center = CGPoint(x:view.center.x + translation.x,
-                                      y:view.center.y + translation.y)
-            }
-            sender.setTranslation(CGPoint.zero, in: self)
+                let translation = sender.translation(in: self)
+                let newX: CGFloat = imageView.center.x + translation.x
+                let newY: CGFloat = imageView.center.y + translation.y
+                imageView.center = CGPoint(x: newX, y: newY)
+                sender.setTranslation(CGPoint.zero, in: self)
         }
     }
     
@@ -103,11 +105,8 @@ public class HImageView: UIImageView {
             self.imageView?.removeFromSuperview()
             self.viewContainer = nil
             self.imageView = nil
-            NotificationCenter.default.post(name: NSNotification.Name.CellStopZoom, object: nil)
         }
     }
     
-    deinit {
-        
-    }
+    deinit {}
 }

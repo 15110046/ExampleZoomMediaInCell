@@ -17,7 +17,6 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         viewIsReady()
-        regitstNotificationCenter()
     }
     
     func viewIsReady() {
@@ -26,29 +25,8 @@ class ViewController: UIViewController {
         collectionView.dataSource = self
     }
     
-    func regitstNotificationCenter() {
-        NotificationCenter.default
-            .addObserver(self,
-                         selector: #selector(setScrollDisable),
-                         name: NSNotification.Name.CellisZooming, object: nil)
-        
-        NotificationCenter.default
-            .addObserver(self,
-                         selector: #selector(setScrollEnabled),
-                         name: NSNotification.Name.CellStopZoom, object: nil)
-    }
     
-    @objc func setScrollEnabled() {
-        collectionView.isScrollEnabled = true
-    }
-    @objc func setScrollDisable() {
-        collectionView.isScrollEnabled = false
-    }
-    
-    deinit {
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.CellisZooming, object: nil)
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.CellStopZoom, object: nil)
-    }
+    deinit {}
 }
 
 extension ViewController: UICollectionViewDataSource {
@@ -67,13 +45,11 @@ extension ViewController: UICollectionViewDataSource {
 extension ViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 150, height: 300)
+        return CGSize(width: (collectionView.frame.width-10)/2, height: 300)
     }
     
 }
 
-extension ViewController: UICollectionViewDelegateFlowLayout {
-    
-}
+extension ViewController: UICollectionViewDelegateFlowLayout {}
 
 

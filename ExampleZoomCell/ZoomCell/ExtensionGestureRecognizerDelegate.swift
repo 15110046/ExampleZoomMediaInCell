@@ -7,10 +7,23 @@ import UIKit
 
 extension HImageView: UIGestureRecognizerDelegate {
     
-    public func gestureRecognizer(
-        _ gestureRecognizer: UIGestureRecognizer,
+    public func gestureRecognizer(           _ gestureRecognizer: UIGestureRecognizer,
         shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        return true
+        
+        if gestureRecognizer == pinch, otherGestureRecognizer == pan {
+            return true
+        }
+        else {
+            if gestureRecognizer == pan, otherGestureRecognizer == pinch {
+                return true
+            }
+            else {
+                if otherGestureRecognizer == pan || gestureRecognizer == pan {
+                    return true
+                }
+                return false
+            }
+        }
     }
     
 }
