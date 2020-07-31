@@ -29,7 +29,7 @@ extension HImageView {
     }
     
     public func setupUIWhenStartPinch(scale: CGFloat) {
-        if scale > config.minZoom, viewContainer == nil {
+        if scale > config.minZoom, viewContainer == nil, self.image?.hasContent ?? false {
             addViewContainer()
             viewContainnerAddImageView()
             updateFlags()

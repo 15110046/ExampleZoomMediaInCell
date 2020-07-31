@@ -10,5 +10,10 @@ extension UIView {
     var globalFrame :CGRect? {
         return self.superview?.convert(self.frame, to: nil)
     }
-    
+}
+
+public extension UIImage {
+  public var hasContent: Bool {
+    return cgImage != nil || ciImage != nil
+  }
 }

@@ -23,7 +23,7 @@ class MediaCell: UICollectionViewCell {
                                              autoStopWhenZoomMin: false,
                                              isUpdateAlphaWhenHandle: true)
         imageView.config(configZoom)
-        imageView.image = UIImage.init(named: ["a","b","c","d","e","g","h","i"].randomElement() ?? "a")
+        imageView.image = UIImage.init(named: ["a","b","c","d"].randomElement() ?? "a")
     }
     
     override func prepareForReuse() {
